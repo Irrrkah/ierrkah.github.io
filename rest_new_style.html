@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Darker Grotesque">
+    <script src="https://js.arcgis.com/4.16/"></script>
+    <style>
+        html,
+        body,
+        #viewDiv {
+          padding: 0;
+          margin: 0;
+          height: 97.2%;
+        }
+
+        #containerDiv {
+            padding: 0px;
+            text-align: left;
+            width: 300px;
+            height: 205px;
+            margin: 10px;
+        }
+
+        #histogramDiv {
+            padding: 0px;
+            width: 280px;
+            height: 155px;
+            margin: 10px;
+        }
+      </style>
+</head>
+<body style = 'background-color:rgb(2,2,2);'>
+    <header class='Text' style = 'background-color:white; padding: 1px;'>
+        <h1 style = 'margin: 10px;
+                    font-family: Darker Grotesque;
+                    font-size: 7; 
+                    font-style: normal;
+                    background-color:white;'> 
+                    <!-- <br> -->
+                        Restaurants in LA County and their scores from health inspection 2018-2020
+                    <br>
+                    <!-- <br> -->
+        </h1>
+        <p style = 'margin: 10px; 
+                    font-family: Darker Grotesque; 
+                    font-size: 22px;'>
+            Zoom in until separate dots of restaurants appear. Some restaurants have same locations, so they might hide under others. Use popups to find particular facilities if they do not appear on their places. The database does not include Pasadena, Long Beach, and Vernon.
+        </p>
+    </header>
+    <div id="viewDiv"></div>
+    <div id="containerDiv" style = 'background-color:rgb(255, 255, 255)' class = "esri-widget">
+        <div id="histogramDiv">
+            <p style = 'margin: 10px; 
+                font-family: Darker Grotesque; 
+                font-size: 22px;
+                text-align: center;'>
+                Distribution of Scores
+            </p>
+        </div>
+    </div>
+    <script>
+        require([
+            // "esri/Basemap",
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/PopupTemplate",
+            "esri/widgets/Legend",
+            "esri/renderers/SimpleRenderer",
+            "esri/symbols/SimpleFillSymbol",
+            "esri/widgets/Search",
+            "esri/smartMapping/statistics/histogram",
+            "esri/widgets/Histogram",
+            "esri/smartMapping/statistics/summaryStatistics",
+            "esri/widgets/smartMapping/ColorSlider"],
+            function(Map, MapView, FeatureLayer, PopupTemplate, Legend, SimpleRenderer, SimpleFillSymbol, Search, histogram, Histogram, summaryStatistics, ColorSlider){
+                // let myBasemap = new Basemap({
+                //     baseLayers: [
+                //         new WebTileLayer(...)
+                //     ],
+                //     referenceLayers: [
+                //         new WebTileLayer(...)
+                //     ],
+                // });
+                
+                let myMap = new Map({
+                    basemap: 'gray-vector'
+                    }
+                );
+                
+                let myMapView = new MapView({
+                    map: myMap,
+                    container: 'viewDiv',
+                    center: [-118.2, 34.0],
+                    zoom: 10
+                    }
+                );
+
+                const Rest1SimpleRenderer = {
+                    type: 'simple',
+                    symbol: {
+                        type: 'simple-marker',
+                        size: 4,
+                        color: [64,25,163],
+                        outline: {
+                            color: [43,0,153, 0.5], 
+                            width: 5
+                        }
+                    },
+                    visualVariables: [{
+                        legendOptions: {
+                            title: "Mean Scores From Health Inspections 2018-2020"
+                        },
+                    }]
+                };
+
+                const Rest2SimpleRenderer = {
+                    type: 'simple',
+                    symbol: {
+                        type: 'simple-marker',
+                        size: 8,
+                        color: '#faebd7',
+                        outline: {
+                            color: [135,115,199, 0.5],
+                            width: 5
+                        }
+                    }
+                };
+
+                const RestContrenderer = {
+                    type: 'simple',
+                    symbol: {
+                        type: 'simple-marker',
+                        size: 8,
+                        outline: {
+                            width: 1.5,
+                            color: [0,0,0, 0.6]
+                        },
+                    },
+                    legendOptions: {
+                        title: "Mean Points"
+                    },
+                    visualVariables: [{
+                        type: 'color',
+                        field: 'mn_pnts',
+                        stops: [
+                            {value: 80,
+                            color: '#A18000',
+                            label: '80'},
+                            {value: 90,
+                            color: '#FAB733',
+                            label: '90'},
+                            {value: 95,
+                            color: '#74d600',
+                            label: '95'},
+                            {value: 98,
+                            color: '#015200',
+                            label: '98'}
+                        ]
+                    }]
+                };
+
+                let Rest1 = new FeatureLayer({
+                    url: 'https://services9.arcgis.com/tuaF829zGxPzrij9/arcgis/rest/services/restaurants_active_26k/FeatureServer',
+                    renderer: Rest1SimpleRenderer,
+                    maxScale: 8000,
+                    popupTemplate: {
+                        title: '{fclty_n}',
+                        content: [{
+                            type: 'fields',
+                            fieldInfos: [
+                                {
+                                    fieldName: 'facility_a',
+                                    label: 'Facility Address'
+                                },
+                                {
+                                    fieldName: 'mn_pnts', // HOW TO ROUND - format{}
+                                    label: 'Mean Score From Health Inspections 2018-2020'
+                                }
+                            ]
+                        }]
+                    }
+                });
+
+                Rest1.featureReduction = {
+                    type: "cluster",
+                    clusterRadius: 50,
+                    clusterMinSize: "18px",
+                    clusterMaxSize: "70px",
+                    popupTemplate: {
+                        content: "This cluster represents {cluster_count} restaurants"
+                    },
+                    labelingInfo: [{
+                        deconflictionStrategy: "none",
+                        labelExpressionInfo: {expression: "Text($feature.cluster_count, '#,###')"},
+                        labelPlacement: "center-center",
+                        symbol: {
+                            type: 'text',
+                            color: '#eceff0', 
+                            font: {
+                                weight: "bold",
+                                family: "Noto Sans",
+                                size: "12px"
+                            }
+                        }
+                    }],
+                };
+
+                // var Rest1legend = new Legend({
+                //     view: myMapView,
+                //     layerInfos: [{
+                //         layer: Rest1,
+                //         title: "Restaurants"
+                //     }]
+                // });
+
+                // myMapView.ui.add(Rest2legend, "bottom-right");
+                // myMapView.ui.add(Rest1legend, "bottom-right");
+                myMap.add(Rest1);
+
+
+                let Rest2 = new FeatureLayer({
+                    url: 'https://services9.arcgis.com/tuaF829zGxPzrij9/arcgis/rest/services/restaurants_active_26k/FeatureServer',
+                    renderer: RestContrenderer, // Rest2SimpleRenderer,
+                    minScale: 8000,
+                    popupTemplate: {
+                        title: '{fclty_n}',
+                        content: [{
+                            type: 'fields',
+                            fieldInfos: [
+                                {
+                                    fieldName: 'facility_a',
+                                    label: 'Facility Address'
+                                },
+                                {
+                                    fieldName: 'mn_pnts', // HOW TO ROUND
+                                    label: 'Mean Scores From Health Inspections',
+                                    format: {
+                                        // digitSeparator: true, // Uses a comma separator in numbers >999
+                                        places: 1 // Sets the number of decimal places to 0 and rounds up
+                                    }
+                                },
+                                {
+                                    fieldName: 'p_dscrp',
+                                    label: 'Description: food facility kind, number of seats, risk category'
+                                }
+                            ]
+                        }]
+                    },
+                    labelingInfo: {
+                        symbol: {
+                            type: 'text',
+                            color: "#063232",
+                            font: {
+                                weight: "bold",
+                                family: "Noto Sans",
+                                size: 8,
+                            }
+                        },
+                        labelExpressionInfo: {
+                            expression: "$feature.fclty_n"
+                        }
+                    }
+                });
+                var Rest2legend = new Legend({
+                    view: myMapView,
+                    layerInfos: [{
+                        layer: Rest2,
+                        title: "Restaurants"
+                    },
+                    {
+                        fieldName: 'mn_pnts',
+                        label: 'Mean Scores From Health Inspections',
+                    }]
+                });
+                myMap.add(Rest2);
+                myMapView.whenLayerView(Rest2).then(function(layerView){
+                    myMapView.ui.add(Rest2legend, "bottom-right");
+                });
+
+                const searchWidget = new Search({
+                    view: myMapView
+                });
+                myMapView.ui.add(searchWidget, {
+                    position: "top-right",
+                });
+
+                // HIST
+                myMapView.ui.add("containerDiv", "bottom-left");
+
+                let histogramChart;
+                let histogramMinLabel = 80;
+                let histogramMaxLabel = 100;
+
+                const min = 80; // custom limits
+                const max = 100;
+                histogram({
+                    layer: Rest1,
+                    field: "mn_pnts",
+                    numBins: 50,
+                    minValue: min,
+                    maxValue: max
+                }).then(function(histogramResult){
+                    const histogramChart = Histogram.fromHistogramResult(histogramResult);
+                    histogramChart.container = "histogramDiv";
+                    histogramChart.dataLines = [{
+                        value: 90,
+                        label: "90"
+                    },
+                    {
+                        value: 93.86048, // histogramResult.minValue + 10,  случайная палочка пример
+                        label: "93.86 average"
+                    },
+                    {
+                        value: 67, 
+                        label: "min"
+                    },
+                    {
+                        value: 100, 
+                        label: "max"
+                    }];
+                    histogramMaxLabel.innerText = histogramResult.maxValue;
+                    histogramMinLabel = histogramResult.minValue;
+                });
+                
+
+            })
+    </script>
+</body>
+</html>
