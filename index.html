@@ -73,7 +73,7 @@
             bottom: 50px;
             background-color: #f1f1f1;
             min-width: 300px;
-            height: 245px;
+            /* height: 245px; */
             box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
             z-index: 1;
         }
@@ -81,13 +81,11 @@
         /* Links inside the dropup */
         .dropup-content a {
             color: black;
-            height: 245px;
-            width: 300px;
-            padding: 1px 1px 1px 1px;
+            padding: 12px 16px;
             text-decoration: none;
             display: block;
         }
-
+        
         /* Change color of dropup links on hover */
         .dropup-content a:hover {background-color: #ddd}
         /* Change the background color of the dropup button when the dropup content is shown */
@@ -95,6 +93,7 @@
             background-color:rgb(64,25,163);
         }
         .show {display:block;}
+
       </style>
 </head>
 <body style = 'background-color:rgb(2,2,2);'>
@@ -134,24 +133,24 @@
 
     <div id="infoDiv" class="dropup">
         <button onclick="myFunctionINFO()" id="infobtn" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Info</button>
-        <div id="myInfo" class="dropup-content">
-          <a>
-            Health inspection is tratata
-            the data includes inspections from 2018 - July 2020. Only restaurants active in July are included. 
-            lorem Inpsum
-          </a>
+        <div id="myInfo" class="dropup-content" style='
+        background-color: #f1f1f1;
+        height: 145px;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);'>
+            <a target="_blank" rel="noopener noreferrer" href="http://publichealth.lacounty.gov/eh/misc/ehpost.htm" style='font-family: PT Sans, sans-serif;'>Restaurant/Market Grading System</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://data.lacounty.gov/Health/COUNTY-OF-LOS-ANGELES-RESTAURANT-AND-MARKET-INSPEC/6ni6-h5kp" style='font-family: PT Sans, sans-serif;'>Data</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://ira-koroleva.medium.com/potentially-good-places-to-look-for-dinner-in-la-77bdb18cd7d6" style='font-family: PT Sans, sans-serif;'>Pretty Static Maps</a>
         </div>
     </div> 
 
     <div id="dropupDiv" class="dropup">
         <button onclick="myFunctionUP()" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Histogram</button>
         <div id="myDropup" class="dropup-content">
-          <a>
-            <div id="containerDiv">
-                <p id="histogram-title" class="esri-widget">Distribution of Mean Scores</p>
+            <!-- <div id="containerDiv"> -->
+                <p id="histogram-title" class="esri-widget" style='font-family: PT Sans, sans-serif;' >Distribution of Mean Scores</p>
                 <div id="histogram"></div>
-            </div>
-          </a>
+            <!-- </div> -->
         </div>
       </div>
 
