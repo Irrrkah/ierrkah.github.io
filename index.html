@@ -23,17 +23,78 @@
         #containerDiv {
             padding: 0px;
             text-align: left;
-            width: 300px;
-            height: 205px;
-            margin: 10px;
+            /* width: 300px; */
+            height: 245px;
+            /* margin: 0px;
+            bottom: 0px; */
+            /* background-color: green; */
         }
 
-        #histogramDiv {
-            padding: 0px;
-            width: 280px;
-            height: 155px;
-            margin: 10px;
+        #infoDiv {
+            background-color: indianred;
         }
+
+        #histogram {
+            padding: 0px;
+            /* width: 290px; */
+            height: 210px;
+            /* margin: 3px; */
+            /* background-color: gold; */
+        }
+
+        #histogram-title {
+            /* width: 280; */
+            padding: 7px;
+            margin: 0px;
+            text-align: center;
+            /* background-color: fuchsia; */
+        }
+
+        /* DROPUP */
+        /* Dropup Button */
+        .dropbtn {
+            background-color:rgb(141,170,58);
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+        }
+
+        /* The container <div> - needed to position the dropup content */
+        .dropup {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Dropup content (Hidden by Default) */
+        .dropup-content {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            background-color: #f1f1f1;
+            min-width: 300px;
+            height: 245px;
+            box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        /* Links inside the dropup */
+        .dropup-content a {
+            color: black;
+            height: 245px;
+            width: 300px;
+            padding: 1px 1px 1px 1px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropup links on hover */
+        .dropup-content a:hover {background-color: #ddd}
+        /* Change the background color of the dropup button when the dropup content is shown */
+        .dropup:hover .dropbtn {
+            background-color:rgb(64,25,163);
+        }
+        .show {display:block;}
       </style>
 </head>
 <body style = 'background-color:rgb(2,2,2);'>
@@ -58,7 +119,7 @@
         </p>
     </header>
     <div id="viewDiv"></div>
-    <div id="containerDiv" style = 'background-color:rgb(255, 255, 255)' class = "esri-widget">
+    <!-- <div id="containerDiv" style = 'background-color:rgb(255, 255, 255)' class = "esri-widget">
         <div id="histogramDiv">
             <p style = 'margin: 10px; 
                 font-family: Noto Sans, sans-serif;
@@ -68,7 +129,32 @@
                 Distribution of Scores
             </p>
         </div>
-    </div>
+    </div> -->
+
+
+    <div id="infoDiv" class="dropup">
+        <button onclick="myFunctionINFO()" id="infobtn" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Info</button>
+        <div id="myInfo" class="dropup-content">
+          <a>
+            Health inspection is tratata
+            the data includes inspections from 2018 - July 2020. Only restaurants active in July are included. 
+            lorem Inpsum
+          </a>
+        </div>
+    </div> 
+
+    <div id="dropupDiv" class="dropup">
+        <button onclick="myFunctionUP()" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Histogram</button>
+        <div id="myDropup" class="dropup-content">
+          <a>
+            <div id="containerDiv">
+                <p id="histogram-title" class="esri-widget">Distribution of Mean Scores</p>
+                <div id="histogram"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
     <script>
         require([
             // "esri/Basemap",
@@ -286,7 +372,7 @@
                 });
                 myMap.add(Rest2);
                 myMapView.whenLayerView(Rest2).then(function(layerView){
-                    myMapView.ui.add(Rest2legend, "bottom-right");
+                    myMapView.ui.add(Rest2legend, "top-right");
                 });
 
                 const searchWidget = new Search({
@@ -297,7 +383,8 @@
                 });
 
                 // HIST
-                myMapView.ui.add("containerDiv", "bottom-left");
+                myMapView.ui.add("infoDiv", "bottom-left");
+                myMapView.ui.add("dropupDiv", "bottom-left");
 
                 let histogramChart;
                 let histogramMinLabel = 75;
@@ -313,7 +400,7 @@
                     maxValue: max
                 }).then(function(histogramResult){
                     const histogramChart = Histogram.fromHistogramResult(histogramResult);
-                    histogramChart.container = "histogramDiv";
+                    histogramChart.container = "histogram";
                     histogramChart.dataLines = [{
                         value: 80,
                         label: "80"
@@ -336,6 +423,38 @@
                 
 
             })
+
+        // DROPUP
+        function myFunctionUP() {
+            document.getElementById("myDropup").classList.toggle("show");
+        }
+
+        function myFunctionINFO() {
+            document.getElementById("myInfo").classList.toggle("show");
+        }
+
+        // Close the dropdown menu if the user clicks outside of it
+        window.addEventListener("click", function(event) {
+            if (!event.target.matches('.dropbtn')) {
+            var dropups = document.getElementsByClassName("dropup-content");
+            var i;
+            for (i = 0; i < dropups.length; i++) {
+                var openDropup = dropups[i];
+                if (openDropup.classList.contains('show')) {
+                openDropup.classList.remove('show');
+                }
+            }
+            }
+        
+        })
+        
+        window.addEventListener("click", function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                if (document.getElementById("myInfo").classList.contains('show')) {
+                    document.getElementById("myInfo").classList.remove('show');
+            }
+        }});
+
     </script>
 </body>
 </html>
