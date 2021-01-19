@@ -92,70 +92,9 @@
             max-height: 420px;
             width: 240px;
         }
-
       </style>
-</head>
-<body style = 'background-color:rgb(2,2,2);'>
-    <header class='Text' style = 'background-color:rgb(141,170,58); padding: 1px;'>
-        <h1 style = 'margin: 10px;
-                    font-family: Noto Sans;
-                    font-weight: bold;
-                    font-size: 7; 
-                    color: white;
-                    background-color:rgb(141,170,58);'> 
-                    <!-- <br> -->
-                        Restaurants in LA County and their scores from health inspection 2018-2020
-                    <br>
-                    <!-- <br> -->
-        </h1>
-        <p style = 'margin: 10px; 
-                    font-family: PT Sans, sans-serif; 
-                    font-style: normal;
-                    color: white;
-                    font-size: 18px;'>
-            Zoom in until separate dots of restaurants appear. Some restaurants have same locations, so they might hide under others. Use popups to find particular facilities if they do not appear on their places. The database does not include Pasadena, Long Beach, and Vernon.
-        </p>
-    </header>
-    <div id="viewDiv">
-        
-    </div>
-    <!-- <div id="containerDiv" style = 'background-color:rgb(255, 255, 255)' class = "esri-widget">
-        <div id="histogramDiv">
-            <p style = 'margin: 10px; 
-                font-family: Noto Sans, sans-serif;
-                font-weight: normal;
-                font-size: 16px;
-                text-align: center;'>
-                Distribution of Scores
-            </p>
-        </div>
-    </div> -->
 
-
-    <div id="infoDiv" class="dropup">
-        <button onclick="myFunctionINFO()" id="infobtn" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Info</button>
-        <div id="myInfo" class="dropup-content" style='
-        background-color: #f1f1f1;
-        height: 145px;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);'>
-            <a target="_blank" rel="noopener noreferrer" href="http://publichealth.lacounty.gov/eh/misc/ehpost.htm" style='font-family: PT Sans, sans-serif;'>Restaurant/Market Grading System</a>
-            <a target="_blank" rel="noopener noreferrer" href="https://data.lacounty.gov/Health/COUNTY-OF-LOS-ANGELES-RESTAURANT-AND-MARKET-INSPEC/6ni6-h5kp" style='font-family: PT Sans, sans-serif;'>Data</a>
-            <a target="_blank" rel="noopener noreferrer" href="https://ira-koroleva.medium.com/potentially-good-places-to-look-for-dinner-in-la-77bdb18cd7d6" style='font-family: PT Sans, sans-serif;'>Pretty Static Maps</a>
-        </div>
-    </div> 
-
-    <div id="dropupDiv" class="dropup">
-        <button onclick="myFunctionUP()" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Histogram</button>
-        <div id="myDropup" class="dropup-content">
-            <!-- <div id="containerDiv"> -->
-                <p id="histogram-title" class="esri-widget" style='font-family: PT Sans, sans-serif;' >Distribution of Mean Scores</p>
-                <div id="histogram"></div>
-            <!-- </div> -->
-        </div>
-      </div>
-
-    <script>
+      <script>
         require([
             // "esri/Basemap",
             "esri/Map",
@@ -170,16 +109,7 @@
             "esri/widgets/Histogram",
             "esri/smartMapping/statistics/summaryStatistics",
             "esri/widgets/smartMapping/ColorSlider"],
-            function(Map, MapView, FeatureLayer, PopupTemplate, Legend, SimpleRenderer, SimpleFillSymbol, Search, histogram, Histogram, summaryStatistics, ColorSlider){
-                // let myBasemap = new Basemap({
-                //     baseLayers: [
-                //         new WebTileLayer(...)
-                //     ],
-                //     referenceLayers: [
-                //         new WebTileLayer(...)
-                //     ],
-                // });
-                
+            function(Map, MapView, FeatureLayer, PopupTemplate, Legend, SimpleRenderer, SimpleFillSymbol, Search, histogram, Histogram, summaryStatistics, ColorSlider){                
                 let myMap = new Map({
                     basemap: 'gray-vector'
                     }
@@ -455,5 +385,52 @@
         }});
 
     </script>
+</head>
+
+<body style = 'background-color:rgb(2,2,2);'>
+    <header class='Text' style = 'background-color:rgb(141,170,58); padding: 1px;'>
+        <h1 style = 'margin: 10px;
+                    font-family: Noto Sans;
+                    font-weight: bold;
+                    font-size: 7; 
+                    color: white;
+                    background-color:rgb(141,170,58);'> 
+                        Restaurants in LA County and their scores from health inspection 2018-2020
+                    <br>
+        </h1>
+        <p style = 'margin: 10px; 
+                    font-family: PT Sans, sans-serif; 
+                    font-style: normal;
+                    color: white;
+                    font-size: 18px;'>
+            Zoom in until separate dots of restaurants appear. Some restaurants have same locations, so they might hide under others. Use popups to find particular facilities if they do not appear on their places. The database does not include Pasadena, Long Beach, and Vernon.
+        </p>
+    </header>
+    <div id="viewDiv"></div>
+
+    <!-- buttons -->
+    <div id="infoDiv" class="dropup"> 
+        <button onclick="myFunctionINFO()" id="infobtn" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Info</button>
+        <div id="myInfo" class="dropup-content" style='
+        background-color: #f1f1f1;
+        height: 145px;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);'>
+            <a target="_blank" rel="noopener noreferrer" href="http://publichealth.lacounty.gov/eh/misc/ehpost.htm" style='font-family: PT Sans, sans-serif;'>Restaurant/Market Grading System</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://data.lacounty.gov/Health/COUNTY-OF-LOS-ANGELES-RESTAURANT-AND-MARKET-INSPEC/6ni6-h5kp" style='font-family: PT Sans, sans-serif;'>Data</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://ira-koroleva.medium.com/potentially-good-places-to-look-for-dinner-in-la-77bdb18cd7d6" style='font-family: PT Sans, sans-serif;'>Pretty Static Maps</a>
+        </div>
+    </div> 
+
+    <div id="dropupDiv" class="dropup">
+        <button onclick="myFunctionUP()" class="dropbtn" style='font-family: PT Sans, sans-serif;'>Histogram</button>
+        <div id="myDropup" class="dropup-content">
+            <!-- <div id="containerDiv"> -->
+                <p id="histogram-title" class="esri-widget" style='font-family: PT Sans, sans-serif;' >Distribution of Mean Scores</p>
+                <div id="histogram"></div>
+            <!-- </div> -->
+        </div>
+      </div>
+
 </body>
 </html>
