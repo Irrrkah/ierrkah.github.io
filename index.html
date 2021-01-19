@@ -17,18 +17,14 @@
         #viewDiv {
           padding: 0;
           margin: 0;
-          height: 98%;
+          height: 100%;
         }
 
-        #containerDiv {
+        /* #containerDiv {
             padding: 0px;
             text-align: left;
-            /* width: 300px; */
             height: 245px;
-            /* margin: 0px;
-            bottom: 0px; */
-            /* background-color: green; */
-        }
+        } */
 
         #infoDiv {
             background-color: indianred;
@@ -36,14 +32,12 @@
 
         #histogram {
             padding: 0px;
-            /* width: 290px; */
             height: 210px;
-            /* margin: 3px; */
             /* background-color: gold; */
         }
 
         #histogram-title {
-            /* width: 280; */
+            width: 280px;
             padding: 7px;
             margin: 0px;
             text-align: center;
@@ -72,13 +66,13 @@
             position: absolute;
             bottom: 50px;
             background-color: #f1f1f1;
-            min-width: 300px;
+            /* min-width: 300px; */
             /* height: 245px; */
-            box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
+            /* box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2); */
             z-index: 1;
         }
 
-        /* Links inside the dropup */
+        /* Links inside the dropup - only info button */
         .dropup-content a {
             color: black;
             padding: 12px 16px;
@@ -122,7 +116,9 @@
             Zoom in until separate dots of restaurants appear. Some restaurants have same locations, so they might hide under others. Use popups to find particular facilities if they do not appear on their places. The database does not include Pasadena, Long Beach, and Vernon.
         </p>
     </header>
-    <div id="viewDiv"></div>
+    <div id="viewDiv">
+        
+    </div>
     <!-- <div id="containerDiv" style = 'background-color:rgb(255, 255, 255)' class = "esri-widget">
         <div id="histogramDiv">
             <p style = 'margin: 10px; 
