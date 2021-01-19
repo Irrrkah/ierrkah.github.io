@@ -17,7 +17,7 @@
         #viewDiv {
           padding: 0;
           margin: 0;
-          height: 94%;
+          height: 98%;
         }
 
         #containerDiv {
@@ -102,7 +102,7 @@
       </style>
 </head>
 <body style = 'background-color:rgb(2,2,2);'>
-    <header class='Text' style = 'background-color:rgb(141,170,58); padding: 1px; height: 20%'>
+    <header class='Text' style = 'background-color:rgb(141,170,58); padding: 1px;'>
         <h1 style = 'margin: 10px;
                     font-family: Noto Sans;
                     font-weight: bold;
@@ -243,7 +243,7 @@
                     },
                     visualVariables: [{
                         type: 'color',
-                        field: 'mn_pnts',
+                        field: 'score',
                         stops: [
                             {value: 80,
                             color: '#A18000',
@@ -262,11 +262,11 @@
                 };
 
                 let Rest1 = new FeatureLayer({
-                    url: 'https://services9.arcgis.com/tuaF829zGxPzrij9/arcgis/rest/services/restaurants_active_26k/FeatureServer',
+                    url: 'https://services9.arcgis.com/tuaF829zGxPzrij9/arcgis/rest/services/rest_new18_20_unique/FeatureServer',
                     renderer: Rest1SimpleRenderer,
                     maxScale: 8000,
                     popupTemplate: {
-                        title: '{fclty_n}',
+                        title: '{facility_n}',
                         content: [{
                             type: 'fields',
                             fieldInfos: [
@@ -275,7 +275,7 @@
                                     label: 'Facility Address'
                                 },
                                 {
-                                    fieldName: 'mn_pnts', // HOW TO ROUND - format{}
+                                    fieldName: 'score', // HOW TO ROUND - format{}
                                     label: 'Mean Score From Health Inspections 2018-2020'
                                 }
                             ]
@@ -321,11 +321,11 @@
 
 
                 let Rest2 = new FeatureLayer({
-                    url: 'https://services9.arcgis.com/tuaF829zGxPzrij9/arcgis/rest/services/restaurants_active_26k/FeatureServer',
+                    url: 'https://services9.arcgis.com/tuaF829zGxPzrij9/arcgis/rest/services/rest_new18_20_unique/FeatureServer',
                     renderer: RestContrenderer, // Rest2SimpleRenderer,
                     minScale: 8000,
                     popupTemplate: {
-                        title: '{fclty_n}',
+                        title: '{facility_n}',
                         content: [{
                             type: 'fields',
                             fieldInfos: [
@@ -334,7 +334,7 @@
                                     label: 'Facility Address'
                                 },
                                 {
-                                    fieldName: 'mn_pnts', // HOW TO ROUND
+                                    fieldName: 'score', // HOW TO ROUND
                                     label: 'Mean Scores From Health Inspections',
                                     format: {
                                         // digitSeparator: true, // Uses a comma separator in numbers >999
@@ -342,7 +342,7 @@
                                     }
                                 },
                                 {
-                                    fieldName: 'p_dscrp',
+                                    fieldName: 'pe_descrip',
                                     label: 'Description: food facility kind, number of seats, risk category'
                                 }
                             ]
@@ -359,7 +359,7 @@
                             }
                         },
                         labelExpressionInfo: {
-                            expression: "$feature.fclty_n"
+                            expression: "$feature.facility_n"
                         }
                     }
                 });
@@ -370,7 +370,7 @@
                         title: "Restaurants"
                     },
                     {
-                        fieldName: 'mn_pnts',
+                        fieldName: 'score',
                         label: 'Mean Scores From Health Inspections',
                     }]
                 });
@@ -398,7 +398,7 @@
                 const max = 100;
                 histogram({
                     layer: Rest1,
-                    field: "mn_pnts",
+                    field: "score",
                     numBins: 50,
                     minValue: min,
                     maxValue: max
