@@ -107,11 +107,8 @@
             "esri/renderers/SimpleRenderer",
             "esri/symbols/SimpleFillSymbol",
             "esri/widgets/Search",
-            "esri/smartMapping/statistics/histogram",
-            "esri/widgets/Histogram",
-            "esri/smartMapping/statistics/summaryStatistics",
-            "esri/widgets/smartMapping/ColorSlider"],
-            function(Map, MapView, FeatureLayer, PopupTemplate, Legend, SimpleRenderer, SimpleFillSymbol, Search, histogram, Histogram, summaryStatistics, ColorSlider){                
+            "esri/widgets/Expand"],
+            function(Map, MapView, FeatureLayer, PopupTemplate, Legend, SimpleRenderer, SimpleFillSymbol, Search, Expand){                
                 let myMap = new Map({
                     basemap: 'gray-vector'
                     }
@@ -290,6 +287,7 @@
                         }
                     }
                 });
+
                 var Rest2legend = new Legend({
                     view: myMapView,
                     layerInfos: [{
@@ -301,68 +299,37 @@
                         label: 'Mean Scores From Health Inspections',
                     }]
                 });
+
+                LegendExpand = new Expand({
+                    view: myMapView,
+                    content: Rest2legend,
+                    expanded: false,
+                    expandTooltip: "Legend"
+                });
+
                 myMap.add(Rest2);
                 myMapView.whenLayerView(Rest2).then(function(layerView){
-                    myMapView.ui.add(Rest2legend, "top-right");
+                    myMapView.ui.add(LegendExpand, "top-left");
                 });
 
                 const searchWidget = new Search({
                     view: myMapView
                 });
-                myMapView.ui.add(searchWidget, {
-                    position: "top-right",
+
+                SearchExpand = new Expand({
+                    view: myMapView,
+                    content: searchWidget,
+                    expanded: false,
+                    expandTooltip: "Search"
                 });
 
-                // HIST
-                // myMapView.ui.add("infoDiv", "bottom-left");
-                // myMapView.ui.add("dropupDiv", "bottom-left");
-
-                let histogramChart;
-                let histogramMinLabel = 75;
-                let histogramMaxLabel = 100;
-
-                const min = 75; // custom limits
-                const max = 100;
-                histogram({
-                    layer: Rest1,
-                    field: "score",
-                    numBins: 50,
-                    minValue: min,
-                    maxValue: max
-                }).then(function(histogramResult){
-                    const histogramChart = Histogram.fromHistogramResult(histogramResult);
-                    histogramChart.container = "histogram";
-                    histogramChart.dataLines = [{
-                        value: 80,
-                        label: "80"
-                    },
-                    {
-                        value: 93.86048, // histogramResult.minValue + 10,  случайная палочка пример
-                        label: "93.86 avg"
-                    },
-                    {
-                        value: 67, 
-                        label: "min"
-                    },
-                    {
-                        value: 100, 
-                        label: "100 max"
-                    }];
-                    histogramMaxLabel.innerText = histogramResult.maxValue;
-                    histogramMinLabel = histogramResult.minValue;
+                myMapView.ui.add(SearchExpand, {
+                    position: "top-left",
                 });
-                
+
+                                
 
             })
-
-        // DROPUP
-        function myFunctionUP() {
-            document.getElementById("myDropup").classList.toggle("show");
-        }
-
-        function myFunctionINFO() {
-            document.getElementById("myInfo").classList.toggle("show");
-        }
 
     </script>
 </head>
