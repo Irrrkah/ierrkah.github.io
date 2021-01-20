@@ -94,6 +94,9 @@
         .esri-ui-corner .esri-expand .esri-widget--panel, .esri-ui-corner .esri-expand .esri-widget--panel-height-only, .esri-ui-corner .esri-component>.esri-widget--panel, .esri-ui-corner .esri-component.esri-widget--panel {
             width: 200px;
         }
+        .esri-expand__content--expanded{
+            height: 32px;
+        }
       </style>
 
       <script>
@@ -326,8 +329,50 @@
                     position: "top-left",
                 });
 
-                                
+                var sqlExpressions = [
+                    "score > 60",
+                    "score > 94",
+                    "score > 98"
+                ];
+                var selectFilter = document.createElement("select");
+                selectFilter.setAttribute("class", "esri-widget esri-select");
+                selectFilter.setAttribute(
+                    "style", "width: 240px; font-family: PT Sans; font-size: 1em; height: 32px;"
+                );
+                sqlExpressions.forEach(function (sql) {
+                    var option = document.createElement("option");
+                    option.value = sql;
+                    option.innerHTML = sql;
+                    selectFilter.appendChild(option);
+                });
+                myMapView.ui.add(selectFilter, "top-right");
 
+                function setFeatureLayerViewFilter(expression) {
+                    myMapView.whenLayerView(Rest2).then(function (featureLayerView) {
+                        featureLayerView.filter = {
+                        where: expression
+                        };
+                    });
+                    myMapView.whenLayerView(Rest1).then(function (featureLayerView) {
+                        featureLayerView.filter = {
+                        where: expression
+                        };
+                    });
+                }
+                selectFilter.addEventListener("change", function (event) {
+                    setFeatureLayerViewFilter(event.target.value);
+                });       
+
+                SelectExpand = new Expand({
+                    view: myMapView,
+                    content: selectFilter,
+                    expanded: false,
+                    expandIconClass: "esri-icon-filter",
+                });
+
+                myMapView.ui.add(SelectExpand, {
+                    position: "top-left",
+                });
             })
 
     </script>
@@ -348,7 +393,7 @@
                     font-style: normal;
                     color: white;
                     font-size: 18px;'>
-            Zoom in until separate dots of restaurants appear. Some restaurants have same locations, so they might hide under others. Use popups to find particular facilities if they do not appear on their places. The database does not include Pasadena, Long Beach, and Vernon.
+            Zoom in until separate green dots of restaurants appear. Some restaurants have same locations, so they might hide under others. Use popups to find particular facilities if they do not appear on their places. The database does not include Pasadena, Long Beach, and Vernon.
         </p>
     </header>
 
